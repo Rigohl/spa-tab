@@ -1,1 +1,5 @@
-import React from 'react'; export default function Estadisticas() { return <div>Estadísticas privadas del CRM</div>; }
+import React from 'react';
+
+const Estadisticas = () => <div>Vista Estadísticas aquí</div>;
+
+export default Estadisticas;
