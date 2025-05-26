@@ -1,5 +1,5 @@
 {
-  "name": "crm-kanban-spamonterrey",
+  "name": "crm-kanban-sync",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
@@ -12,6 +12,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
-    "vite": "^4.0.0"
+    "vite": "^4.5.0"
   }
 }
