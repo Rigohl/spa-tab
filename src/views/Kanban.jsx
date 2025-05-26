@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-const columnas = ['Nuevo contacto', 'Respondido', 'Citada a entrevista', 'Acudió', 'Negocio asignado', 'Dejó de contestar'];
+const columns = [
+  { title: 'Nuevo contacto', cards: [...], color: '#e3f2fd', icon: '🆕' },
+  { title: 'Respondido', cards: [...], color: '#fff3e0', icon: '✉️' },
+  { title: 'Citada a entrevista', cards: [...], color: '#f3e5f5', icon: '📅' },
+  { title: 'Acudió', cards: [...], color: '#e8f5e9', icon: '✅' },
+  { title: 'Negocio asignado', cards: [...], color: '#fbe9e7', icon: '🏢' },
+  { title: 'Dejó de contestar', cards: [...], color: '#ffebee', icon: '❌' },
+];
 
 export default function Kanban() {
   const [datos, setDatos] = useState([]);
