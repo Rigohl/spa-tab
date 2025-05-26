@@ -9,7 +9,7 @@ export default function Kanban() {
     fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTggtutTXyfmpQDP5H0du_G3s_Heo9vUmZc0sT5J7ukS5XeLfHvmC0N8MrN_AwvUzAZx5s94BP6dsSf/pub?output=csv')
       .then(res => res.text())
       .then(text => {
-        const rows = text.split('\\n').map(row => row.split(','));
+        const rows = text.split('\n').map(row => row.split(','));
         const headers = rows[0];
         const entries = rows.slice(1).map(r => {
           let obj = {};
