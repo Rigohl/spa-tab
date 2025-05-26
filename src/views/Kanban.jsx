@@ -1,0 +1,1 @@
+import React from 'react'; export default function Kanban() { return <div>CRM Kanban SpaMonterrey funcionando</div>; }

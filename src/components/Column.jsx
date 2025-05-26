@@ -1,0 +1,1 @@
+import React from 'react'; export default function Column({ titulo, children }) { return <div className='column'><h3>{titulo}</h3>{children}</div>; }

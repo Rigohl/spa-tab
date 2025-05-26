@@ -1,0 +1,1 @@
+import React from 'react'; export default function Estadisticas() { return <div>Estadísticas privadas del CRM</div>; }

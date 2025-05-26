@@ -1,0 +1,1 @@
+import React from 'react'; export default function Card({ nombre }) { return <div className='card'>{nombre}</div>; }
