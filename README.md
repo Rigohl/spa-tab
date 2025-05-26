@@ -1,2 +1,3 @@
-# CRM SpaMonterrey
-Sistema CRM visual con seguimiento, columnas, y estadísticas privadas.
+# CRM Kanban SpaMonterrey
+
+Sistema básico de CRM con vista tipo Kanban y módulo de estadísticas.
