@@ -7,7 +7,13 @@ const Kanban = () => {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
-    getContactsFromSheet().then(data => setContacts(data));
+    getContactsFromSheet().then(data => {
+      // Filtrar solo contactos nuevos (no guardados)
+      const nuevos = data.filter(contact =>
+        !contact.nombre || contact.nombre === 'Sin nombre'
+      );
+      setContacts(nuevos);
+    });
   }, []);
 
   const columns = [
@@ -41,8 +47,8 @@ const Kanban = () => {
             ) : (
               column.cards.map((card, idx) => (
                 <div key={idx} className="card">
-                  <div><strong>{card.nombre}</strong></div>
-                  <div>{card.telefono}</div>
+                  <strong>{card.nombre}</strong><br />
+                  <span>{card.telefono}</span>
                 </div>
               ))
             )}
