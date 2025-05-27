@@ -11,3 +11,4 @@ mew all
 new js and models
 coorreccik agneda
 new janban
+ocultar contaxtos 
