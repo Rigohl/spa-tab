@@ -1,47 +1,37 @@
 // src/components/Card.jsx
 import React, { useState } from 'react';
-import './Card.css'; // Puedes mover estilos aquí si lo deseas
 
 const Card = ({ contact }) => {
   const [nombre, setNombre] = useState(contact.nombre);
-  const [telefono] = useState(contact.telefono);
-  const [nota, setNota] = useState('');
-  const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [editing, setEditing] = useState(false);
 
-  const toggleOpciones = () => {
-    setMostrarOpciones(!mostrarOpciones);
+  const handleNombreChange = (e) => setNombre(e.target.value);
+  const toggleEdit = () => setEditing(!editing);
+
+  const abrirWhatsApp = () => {
+    const numero = contact.telefono.replace(/\D/g, '');
+    window.open(`https://wa.me/${numero}`, '_blank');
   };
 
   return (
     <div className="card">
-      <strong>{nombre}</strong><br />
-      <span>{telefono}</span><br />
-
-      <button onClick={toggleOpciones}>
-        {mostrarOpciones ? 'Ocultar' : 'Opciones'}
-      </button>
-
-      {mostrarOpciones && (
-        <div style={{ marginTop: '8px' }}>
-          <label>
-            Nota:
-            <input
-              type="text"
-              value={nota}
-              onChange={(e) => setNota(e.target.value)}
-              style={{ width: '100%', marginTop: '4px' }}
-            />
-          </label>
-          <br />
-          <a
-            href={`https://wa.me/${telefono.replace(/[^0-9]/g, '')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Abrir en WhatsApp
-          </a>
-        </div>
+      {editing ? (
+        <input
+          value={nombre}
+          onChange={handleNombreChange}
+          onBlur={toggleEdit}
+          autoFocus
+        />
+      ) : (
+        <strong onClick={toggleEdit} style={{ cursor: 'pointer' }}>
+          {nombre}
+        </strong>
       )}
+      <br />
+      <span>{contact.telefono}</span><br />
+      <small>{contact.ciudad} - {contact.origen}</small>
+      <br />
+      <button onClick={abrirWhatsApp}>Abrir WhatsApp</button>
     </div>
   );
 };
