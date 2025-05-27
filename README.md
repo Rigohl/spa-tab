@@ -8,3 +8,4 @@ kanvan
 colores kanva
 kanva correccion 3
 mew all
+new js and models
