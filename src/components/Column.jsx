@@ -2,15 +2,15 @@
 import React from 'react';
 import Card from './Card';
 
-const Column = ({ title, color, icon, cards }) => {
+const Column = ({ title, icon, color, cards }) => {
   return (
     <div className="column" style={{ backgroundColor: color }}>
       <h3>{icon} {title}</h3>
       {cards.length === 0 ? (
         <p style={{ fontStyle: 'italic', color: '#555' }}>Vacío</p>
       ) : (
-        cards.map((card, idx) => (
-          <Card key={idx} data={card} />
+        cards.map((card, index) => (
+          <Card key={index} card={card} columnTitle={title} />
         ))
       )}
     </div>
