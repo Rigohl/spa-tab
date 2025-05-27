@@ -9,9 +9,9 @@ const Card = ({ card, columnTitle }) => {
   const [entrevista, setEntrevista] = useState(card.entrevista || '');
   const [acudio, setAcudio] = useState(card.acudió || '');
   const [gastoUber, setGastoUber] = useState(card.gastoUber || 'No');
-  const [montoUber, setMontoUber] = useState(card.montoUber || '');
-  const [motivoNoTrabajo, setMotivoNoTrabajo] = useState(card.motivo || '');
-  const [subestado, setSubestado] = useState(card.subestado || '');
+  const [montoUber, setMontoUber] = useState('');
+  const [motivoNoTrabajo, setMotivoNoTrabajo] = useState('');
+  const [subestado, setSubestado] = useState('');
 
   const es = (col) => columnTitle === col;
 
@@ -90,7 +90,6 @@ const Card = ({ card, columnTitle }) => {
             <option value="Envió info y no respondió">Envió info y no respondió</option>
             <option value="Envió foto y no respondió">Envió foto y no respondió</option>
             <option value="Se pactó cita y no respondió">Se pactó cita y no respondió</option>
-            <option value="Otro">Otro</option>
           </select>
         </>
       )}
