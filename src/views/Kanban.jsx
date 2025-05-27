@@ -1,3 +1,4 @@
+// src/views/Kanban.jsx
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { getContactsFromSheet } from '../utils/googleSheets';
@@ -40,8 +41,8 @@ const Kanban = () => {
             ) : (
               column.cards.map((card, idx) => (
                 <div key={idx} className="card">
-                  <strong>{card.nombre}</strong><br />
-                  <span>{card.telefono}</span>
+                  <div><strong>{card.nombre}</strong></div>
+                  <div>{card.telefono}</div>
                 </div>
               ))
             )}
