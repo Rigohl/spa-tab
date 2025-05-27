@@ -1,4 +1,3 @@
-// src/utils/googleSheets.js
 export async function getContactsFromSheet() {
   try {
     // Hoja con contactos nuevos (CRM)
@@ -22,7 +21,16 @@ export async function getContactsFromSheet() {
 
     return filtrados.map(contact => ({
       nombre: contact.Nombre || 'Sin nombre',
-      telefono: contact.Teléfono || 'Sin teléfono'
+      telefono: contact.Teléfono || 'Sin teléfono',
+      edad: contact.Edad || '',
+      ciudad: contact.Ciudad || '',
+      origen: contact.Origen || '',
+      negocio: contact.Negocio || '',
+      entrevista: contact.Entrevista || '',
+      acudió: contact.Acudió || '',
+      gastoUber: contact.Uber || '',
+      seguimiento: contact.Seguimiento || '',
+      estado: contact.Estado || 'Nuevo contacto'
     }));
   } catch (error) {
     console.error('Error al cargar contactos:', error);
