@@ -1,1 +1,55 @@
-// App.css - contenido simulado
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background-color: #222;
+  padding: 10px;
+}
+
+nav button {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background-color: #777;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+}
+
+.card input,
+.card select {
+  margin-top: 3px;
+  margin-bottom: 8px;
+  padding: 5px;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
