@@ -1,49 +1,43 @@
 // src/views/Estadisticas.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Estadisticas = () => {
-  // Aquí podrían conectarse con datos reales en el futuro.
-  const estadisticas = {
-    totalContactos: 0,
-    respondieron: 0,
-    citadas: 0,
-    acudieron: 0,
-    uberGastado: 0,
-    negocios: {
-      Mistika1: 0,
-      Mistika2: 0,
-      Libido: 0,
-      Poorkys: 0,
-      Caprice: 0,
-      Secret: 0,
-      Deseos: 0,
-      Relax: 0,
-      Babys: 0,
-      Desire: 0,
-      Hawai: 0,
-      Tokyo: 0
-    },
-    dejaronDeContestar: 0,
-    noRespondieron: 0
-  };
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    fetch('https://opensheet.elk.sh/11mbwKnaO33uNpTwYtQZ896cTTpWnYNoy27ERXKW4ddg/Estadisticas')
+      .then(res => res.json())
+      .then(data => {
+        const resumen = data[0];
+        setStats(resumen);
+      })
+      .catch(err => {
+        console.error('Error al cargar estadísticas:', err);
+      });
+  }, []);
+
+  if (!stats) return <div>Cargando estadísticas...</div>;
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Estadísticas Generales</h2>
+      <h2>Estadísticas generales</h2>
       <ul>
-        <li>Total de contactos: {estadisticas.totalContactos}</li>
-        <li>Respondieron: {estadisticas.respondieron}</li>
-        <li>Citadas a entrevista: {estadisticas.citadas}</li>
-        <li>Acudieron: {estadisticas.acudieron}</li>
-        <li>Total gastado en Uber: ${estadisticas.uberGastado}</li>
-        <li>Dejaron de contestar: {estadisticas.dejaronDeContestar}</li>
-        <li>No respondieron nunca: {estadisticas.noRespondieron}</li>
-      </ul>
-      <h3>Negocios asignados:</h3>
-      <ul>
-        {Object.entries(estadisticas.negocios).map(([nombre, cantidad]) => (
-          <li key={nombre}>{nombre}: {cantidad}</li>
-        ))}
+        <li>Total de contactos: {stats.Total || 0}</li>
+        <li>Respondieron: {stats.Respondieron || 0}</li>
+        <li>Citadas a entrevista: {stats.Citadas || 0}</li>
+        <li>Acudieron: {stats.Acudieron || 0}</li>
+        <li>Gasto total en Uber: ${stats.TotalUber || 0}</li>
+        <li>No respondieron: {stats.NoRespondieron || 0}</li>
+        <li>Dejaron de contestar: {stats.Dejaron || 0}</li>
+        <li>Negocios asignados:</li>
+        <ul>
+          <li>Mistika 1: {stats.Mistika1 || 0}</li>
+          <li>Mistika 2: {stats.Mistika2 || 0}</li>
+          <li>Libido: {stats.Libido || 0}</li>
+          <li>Poorkys: {stats.Poorkys || 0}</li>
+          <li>Caprice: {stats.Caprice || 0}</li>
+          <li>Otros: {stats.Otros || 0}</li>
+        </ul>
       </ul>
     </div>
   );
