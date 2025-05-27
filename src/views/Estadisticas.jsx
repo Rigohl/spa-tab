@@ -1,43 +1,55 @@
 // src/views/Estadisticas.jsx
 import React, { useEffect, useState } from 'react';
+import { getContactsFromSheet } from '../utils/googleSheets';
 
 const Estadisticas = () => {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    fetch('https://opensheet.elk.sh/11mbwKnaO33uNpTwYtQZ896cTTpWnYNoy27ERXKW4ddg/Estadisticas')
-      .then(res => res.json())
-      .then(data => {
-        const resumen = data[0];
-        setStats(resumen);
-      })
-      .catch(err => {
-        console.error('Error al cargar estadísticas:', err);
+    getContactsFromSheet().then(data => {
+      const resumen = {
+        totalContactos: data.length,
+        respondieron: data.filter(d => d.estado === 'Respondido').length,
+        citadas: data.filter(d => d.estado === 'Citada a entrevista').length,
+        acudieron: data.filter(d => d.estado === 'Acudió').length,
+        uberGastado: data.reduce((sum, d) => sum + (parseFloat(d.gastoUber) || 0), 0),
+        dejaronDeContestar: data.filter(d => d.estado === 'Dejó de contestar').length,
+        noRespondieron: data.filter(d => d.estado === 'Nuevo contacto').length,
+        negocios: {}
+      };
+
+      const negocios = [
+        'Mistika1', 'Mistika2', 'Libido', 'Poorkys', 'Caprice', 'Secret',
+        'Deseos', 'Relax', 'Babys', 'Desire', 'Hawai', 'Tokyo'
+      ];
+
+      negocios.forEach(nombre => {
+        resumen.negocios[nombre] = data.filter(d => d.negocio === nombre).length;
       });
+
+      setStats(resumen);
+    });
   }, []);
 
-  if (!stats) return <div>Cargando estadísticas...</div>;
+  if (!stats) return <p>Cargando estadísticas...</p>;
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Estadísticas generales</h2>
+      <h2>Estadísticas Generales</h2>
       <ul>
-        <li>Total de contactos: {stats.Total || 0}</li>
-        <li>Respondieron: {stats.Respondieron || 0}</li>
-        <li>Citadas a entrevista: {stats.Citadas || 0}</li>
-        <li>Acudieron: {stats.Acudieron || 0}</li>
-        <li>Gasto total en Uber: ${stats.TotalUber || 0}</li>
-        <li>No respondieron: {stats.NoRespondieron || 0}</li>
-        <li>Dejaron de contestar: {stats.Dejaron || 0}</li>
-        <li>Negocios asignados:</li>
-        <ul>
-          <li>Mistika 1: {stats.Mistika1 || 0}</li>
-          <li>Mistika 2: {stats.Mistika2 || 0}</li>
-          <li>Libido: {stats.Libido || 0}</li>
-          <li>Poorkys: {stats.Poorkys || 0}</li>
-          <li>Caprice: {stats.Caprice || 0}</li>
-          <li>Otros: {stats.Otros || 0}</li>
-        </ul>
+        <li>Total de contactos: {stats.totalContactos}</li>
+        <li>Respondieron: {stats.respondieron}</li>
+        <li>Citadas a entrevista: {stats.citadas}</li>
+        <li>Acudieron: {stats.acudieron}</li>
+        <li>Total gastado en Uber: ${stats.uberGastado}</li>
+        <li>Dejaron de contestar: {stats.dejaronDeContestar}</li>
+        <li>No respondieron nunca: {stats.noRespondieron}</li>
+      </ul>
+      <h3>Negocios asignados:</h3>
+      <ul>
+        {Object.entries(stats.negocios).map(([nombre, cantidad]) => (
+          <li key={nombre}>{nombre}: {cantidad}</li>
+        ))}
       </ul>
     </div>
   );
