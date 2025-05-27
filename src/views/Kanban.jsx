@@ -1,85 +1,39 @@
-// src/views/Kanban.jsx
-import React, { useEffect, useState } from 'react';
-import '../App.css';
-import { getContactsFromSheet } from '../utils/googleSheets';
+export async function getContactsFromSheet() {
+  try {
+    // Hoja con contactos nuevos (CRM)
+    const responseNuevos = await fetch(
+      'https://opensheet.elk.sh/11mbwKnaO33uNpTwYtQZ896cTTpWnYNoy27ERXKW4ddg/Sheet1'
+    );
+    const nuevosData = await responseNuevos.json();
 
-const Kanban = () => {
-  const [contacts, setContacts] = useState([]);
+    // Hoja con tus contactos agendados
+    const responseAgendados = await fetch(
+      'https://opensheet.elk.sh/11mbwKnaO33uNpTwYtQZ896cTTpWnYNoy27ERXKW4ddg/Agenda'
+    );
+    const agendadosData = await responseAgendados.json();
 
-  useEffect(() => {
-    getContactsFromSheet().then(data => {
-      const nuevos = data.filter(contact =>
-        !contact.nombre || contact.nombre === 'Sin nombre'
-      );
-      setContacts(nuevos);
+    const telefonosAgendados = agendadosData.map(c => c.Teléfono?.trim());
+
+    const filtrados = nuevosData.filter(contacto => {
+      const telefono = contacto.Teléfono?.trim();
+      return telefono && !telefonosAgendados.includes(telefono);
     });
-  }, []);
 
-  const columns = [
-    { title: 'Nuevo contacto', icon: '🆕', color: '#e3f2fd', cards: contacts },
-    { title: 'Respondido', icon: '✉️', color: '#fff3e0', cards: [] },
-    { title: 'Citada a entrevista', icon: '📅', color: '#f3e5f5', cards: [] },
-    { title: 'Acudió', icon: '✅', color: '#e8f5e9', cards: [] },
-    { title: 'Negocio asignado', icon: '🏢', color: '#ede7f6', cards: [] },
-    {
-      title: 'Dejó de contestar',
-      icon: '❌',
-      color: '#fbe9e7',
-      cards: [],
-      suboptions: [
-        'Se envió info y no respondió',
-        'Envió foto y no respondió',
-        'Se pactó cita y no respondió'
-      ]
-    },
-    {
-      title: 'Seguimiento',
-      icon: '⏳',
-      color: '#eceff1',
-      cards: [],
-      seguimiento: {
-        dias: 3,
-        preguntar: [
-          '¿Sigue trabajando?',
-          '¿Tiene amigas interesadas?'
-        ]
-      }
-    }
-  ];
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <h2>CRM SpaMonterrey - Sincronizado</h2>
-      <div style={{ display: 'flex', gap: '10px', overflowX: 'auto' }}>
-        {columns.map((column, index) => (
-          <div
-            key={index}
-            className="column"
-            style={{ backgroundColor: column.color }}
-          >
-            <h3>{column.icon} {column.title}</h3>
-            {column.suboptions && (
-              <ul style={{ fontSize: '0.85em', paddingLeft: '16px', color: '#666' }}>
-                {column.suboptions.map((opt, i) => (
-                  <li key={i}>{opt}</li>
-                ))}
-              </ul>
-            )}
-            {column.cards.length === 0 ? (
-              <p style={{ fontStyle: 'italic', color: '#555' }}>Vacío</p>
-            ) : (
-              column.cards.map((card, idx) => (
-                <div key={idx} className="card">
-                  <strong>{card.nombre}</strong><br />
-                  <span>{card.telefono}</span>
-                </div>
-              ))
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default Kanban;
+    return filtrados.map(contact => ({
+      nombre: contact.Nombre || 'Sin nombre',
+      telefono: contact.Teléfono || 'Sin teléfono',
+      edad: contact.Edad || '',
+      ciudad: contact.Ciudad || '',
+      origen: contact.Origen || '',
+      negocio: contact.Negocio || '',
+      entrevista: contact.Entrevista || '',
+      acudió: contact.Acudió || '',
+      gastoUber: contact.Uber || '',
+      seguimiento: contact.Seguimiento || '',
+      estado: contact.Estado || 'Nuevo contacto'
+    }));
+  } catch (error) {
+    console.error('Error al cargar contactos:', error);
+    return [];
+  }
+}
