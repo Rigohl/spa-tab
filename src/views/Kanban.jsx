@@ -1,4 +1,3 @@
-// src/views/Kanban.jsx
 import React from 'react';
 import '../App.css';
 
