@@ -1,39 +1,46 @@
-export async function getContactsFromSheet() {
-  try {
-    // Hoja con contactos nuevos (CRM)
-    const responseNuevos = await fetch(
-      'https://opensheet.elk.sh/11mbwKnaO33uNpTwYtQZ896cTTpWnYNoy27ERXKW4ddg/Sheet1'
-    );
-    const nuevosData = await responseNuevos.json();
+import React, { useEffect, useState } from 'react';
+import '../App.css';
+import { getContactsFromSheet } from '../utils/googleSheets';
+import Column from '../components/Column';
 
-    // Hoja con tus contactos agendados
-    const responseAgendados = await fetch(
-      'https://opensheet.elk.sh/11mbwKnaO33uNpTwYtQZ896cTTpWnYNoy27ERXKW4ddg/Agenda'
-    );
-    const agendadosData = await responseAgendados.json();
+const Kanban = () => {
+  const [contacts, setContacts] = useState([]);
 
-    const telefonosAgendados = agendadosData.map(c => c.Teléfono?.trim());
-
-    const filtrados = nuevosData.filter(contacto => {
-      const telefono = contacto.Teléfono?.trim();
-      return telefono && !telefonosAgendados.includes(telefono);
+  useEffect(() => {
+    getContactsFromSheet().then(data => {
+      const nuevos = data.filter(contact =>
+        !contact.nombre || contact.nombre === 'Sin nombre'
+      );
+      setContacts(nuevos);
     });
+  }, []);
 
-    return filtrados.map(contact => ({
-      nombre: contact.Nombre || 'Sin nombre',
-      telefono: contact.Teléfono || 'Sin teléfono',
-      edad: contact.Edad || '',
-      ciudad: contact.Ciudad || '',
-      origen: contact.Origen || '',
-      negocio: contact.Negocio || '',
-      entrevista: contact.Entrevista || '',
-      acudió: contact.Acudió || '',
-      gastoUber: contact.Uber || '',
-      seguimiento: contact.Seguimiento || '',
-      estado: contact.Estado || 'Nuevo contacto'
-    }));
-  } catch (error) {
-    console.error('Error al cargar contactos:', error);
-    return [];
-  }
-}
+  const columns = [
+    { title: 'Nuevo contacto', icon: '🆕', color: '#e3f2fd', cards: contacts },
+    { title: 'Respondido', icon: '✉️', color: '#fff3e0', cards: [] },
+    { title: 'Citada a entrevista', icon: '📅', color: '#f3e5f5', cards: [] },
+    { title: 'Acudió', icon: '✅', color: '#e8f5e9', cards: [] },
+    { title: 'Negocio asignado', icon: '🏢', color: '#ede7f6', cards: [] },
+    { title: 'Dejó de contestar', icon: '❌', color: '#fbe9e7', cards: [] },
+    { title: 'Seguimiento', icon: '⏳', color: '#eceff1', cards: [] }
+  ];
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h2>CRM SpaMonterrey - Sincronizado</h2>
+      <div style={{ display: 'flex', gap: '10px', overflowX: 'auto' }}>
+        {columns.map((column, index) => (
+          <Column
+            key={index}
+            title={column.title}
+            icon={column.icon}
+            color={column.color}
+            cards={column.cards}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Kanban;
