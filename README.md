@@ -9,4 +9,5 @@ colores kanva
 kanva correccion 3
 mew all
 new js and models
-coorreccik agneda 
+coorreccik agneda
+new janban
