@@ -9,9 +9,9 @@ const Card = ({ card, columnTitle }) => {
   const [entrevista, setEntrevista] = useState(card.entrevista || '');
   const [acudio, setAcudio] = useState(card.acudió || '');
   const [gastoUber, setGastoUber] = useState(card.gastoUber || 'No');
-  const [montoUber, setMontoUber] = useState('');
-  const [motivoNoTrabajo, setMotivoNoTrabajo] = useState('');
-  const [subestado, setSubestado] = useState('');
+  const [montoUber, setMontoUber] = useState(card.montoUber || '');
+  const [motivoNoTrabajo, setMotivoNoTrabajo] = useState(card.motivo || '');
+  const [subestado, setSubestado] = useState(card.subestado || '');
 
   const es = (col) => columnTitle === col;
 
@@ -33,7 +33,6 @@ const Card = ({ card, columnTitle }) => {
       Origen:{' '}
       <input type="text" value={origen} onChange={(e) => setOrigen(e.target.value)} />
 
-      {/* Entrevista */}
       {es('Citada a entrevista') && (
         <>
           <br />
@@ -42,7 +41,6 @@ const Card = ({ card, columnTitle }) => {
         </>
       )}
 
-      {/* Acudió */}
       {es('Acudió') && (
         <>
           <br />
@@ -61,7 +59,6 @@ const Card = ({ card, columnTitle }) => {
         </>
       )}
 
-      {/* Negocio */}
       {es('Negocio asignado') && (
         <>
           <br />
@@ -84,7 +81,6 @@ const Card = ({ card, columnTitle }) => {
         </>
       )}
 
-      {/* Dejó de contestar */}
       {es('Dejó de contestar') && (
         <>
           <br />
@@ -94,11 +90,11 @@ const Card = ({ card, columnTitle }) => {
             <option value="Envió info y no respondió">Envió info y no respondió</option>
             <option value="Envió foto y no respondió">Envió foto y no respondió</option>
             <option value="Se pactó cita y no respondió">Se pactó cita y no respondió</option>
+            <option value="Otro">Otro</option>
           </select>
         </>
       )}
 
-      {/* Seguimiento */}
       {es('Seguimiento') && (
         <>
           <br />
