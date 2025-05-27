@@ -1,7 +1,4 @@
-// src/utils/roles.js
-export const currentUser = {
-  username: "admin",
-  role: "admin" // o "usuario"
+export const obtenerRol = (telefono) => {
+  const administradores = ['+521234567890', '+529999999999']; // añade los números de admin aquí
+  return administradores.includes(telefono) ? 'admin' : 'normal';
 };
-
-export const isAdmin = () => currentUser.role === "admin";
