@@ -7,10 +7,13 @@ body {
 
 h2 {
   margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
 }
 
 h3 {
   margin: 0 0 10px 0;
+  font-size: 18px;
 }
 
 .column {
@@ -20,12 +23,32 @@ h3 {
   margin: 10px;
   width: 250px;
   flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .card {
   background-color: #ffffff;
   border-radius: 5px;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 10px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+}
+
+.card:hover {
+  background-color: #f0f8ff;
+}
+
+button {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1565c0;
 }
