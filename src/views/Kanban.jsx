@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
-
-const columns = [
-  { title: 'Nuevo contacto', cards: [], color: '#e3f2fd', icon: '🆕' },
-  { title: 'Respondido', cards: [], color: '#fff3e0', icon: '✉️' },
-  { title: 'Citada a entrevista', cards: [], color: '#f3e5f5', icon: '📅' },
-  { title: 'Acudió', cards: [], color: '#e8f5e9', icon: '✅' },
-  { title: 'Negocio asignado', cards: [], color: '#ede7f6', icon: '🏢' },
-  { title: 'Dejó de contestar', cards: [], color: '#fbe9e7', icon: '❌' }
-];
+import { getContactsFromSheet } from '../utils/googleSheets';
 
 const Kanban = () => {
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    getContactsFromSheet().then(data => setContacts(data));
+  }, []);
+
+  const columns = [
+    {
+      title: 'Nuevo contacto',
+      icon: '🆕',
+      color: '#e3f2fd',
+      cards: contacts
+    },
+    { title: 'Respondido', icon: '✉️', color: '#fff3e0', cards: [] },
+    { title: 'Citada a entrevista', icon: '📅', color: '#f3e5f5', cards: [] },
+    { title: 'Acudió', icon: '✅', color: '#e8f5e9', cards: [] },
+    { title: 'Negocio asignado', icon: '🏢', color: '#ede7f6', cards: [] },
+    { title: 'Dejó de contestar', icon: '❌', color: '#fbe9e7', cards: [] },
+    { title: 'Seguimiento', icon: '⏳', color: '#eceff1', cards: [] }
+  ];
+
   return (
     <div style={{ padding: '20px' }}>
       <h2>CRM SpaMonterrey - Sincronizado</h2>
