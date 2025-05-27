@@ -8,7 +8,6 @@ const Kanban = () => {
 
   useEffect(() => {
     getContactsFromSheet().then(data => {
-      // Filtrar solo contactos nuevos (no guardados)
       const nuevos = data.filter(contact =>
         !contact.nombre || contact.nombre === 'Sin nombre'
       );
@@ -17,18 +16,35 @@ const Kanban = () => {
   }, []);
 
   const columns = [
-    {
-      title: 'Nuevo contacto',
-      icon: '🆕',
-      color: '#e3f2fd',
-      cards: contacts
-    },
+    { title: 'Nuevo contacto', icon: '🆕', color: '#e3f2fd', cards: contacts },
     { title: 'Respondido', icon: '✉️', color: '#fff3e0', cards: [] },
     { title: 'Citada a entrevista', icon: '📅', color: '#f3e5f5', cards: [] },
     { title: 'Acudió', icon: '✅', color: '#e8f5e9', cards: [] },
     { title: 'Negocio asignado', icon: '🏢', color: '#ede7f6', cards: [] },
-    { title: 'Dejó de contestar', icon: '❌', color: '#fbe9e7', cards: [] },
-    { title: 'Seguimiento', icon: '⏳', color: '#eceff1', cards: [] }
+    {
+      title: 'Dejó de contestar',
+      icon: '❌',
+      color: '#fbe9e7',
+      cards: [],
+      suboptions: [
+        'Se envió info y no respondió',
+        'Envió foto y no respondió',
+        'Se pactó cita y no respondió'
+      ]
+    },
+    {
+      title: 'Seguimiento',
+      icon: '⏳',
+      color: '#eceff1',
+      cards: [],
+      seguimiento: {
+        dias: 3,
+        preguntar: [
+          '¿Sigue trabajando?',
+          '¿Tiene amigas interesadas?'
+        ]
+      }
+    }
   ];
 
   return (
@@ -42,6 +58,13 @@ const Kanban = () => {
             style={{ backgroundColor: column.color }}
           >
             <h3>{column.icon} {column.title}</h3>
+            {column.suboptions && (
+              <ul style={{ fontSize: '0.85em', paddingLeft: '16px', color: '#666' }}>
+                {column.suboptions.map((opt, i) => (
+                  <li key={i}>{opt}</li>
+                ))}
+              </ul>
+            )}
             {column.cards.length === 0 ? (
               <p style={{ fontStyle: 'italic', color: '#555' }}>Vacío</p>
             ) : (
