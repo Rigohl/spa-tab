@@ -20,9 +20,9 @@ const Kanban = () => {
     obtenerDatos().then(setDatos);
   }, []);
 
-  const datosPorColumna = (columna) => {
-    return datos.filter((item) => item.estado === columna);
-  };
+ const datosPorColumna = (columna) => {
+  return datos.filter((item) => item.estado && item.estado === columna);
+};
 
   return (
     <div style={{ display: 'flex', overflowX: 'auto' }}>
