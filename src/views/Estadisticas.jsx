@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { obtenerDatos } from '../utils/googleSheets';
+// src/views/Estadisticas.jsx
+import React from 'react';
 
-const Estadisticas = () => {
-  const [datos, setDatos] = useState([]);
-
-  useEffect(() => {
-    obtenerDatos().then(setDatos);
-  }, []);
-
-  const contar = (campo, valor) => datos.filter(d => d[campo] === valor).length;
+const Estadisticas = ({ datos }) => {
+  const contar = (campo, valor) => datos.filter((d) => d[campo] === valor).length;
 
   const total = datos.length;
   const respondido = contar('estado', 'Respondido');
   const entrevistas = contar('estado', 'Citada a entrevista');
   const acudieron = contar('estado', 'Acudió');
-  const gastosUber = datos.filter(d => d.gastoUber === 'Sí').reduce((acc, cur) => acc + (parseFloat(cur.montoUber) || 0), 0);
+  const gastosUber = datos
+    .filter((d) => d.gastoUber === 'Sí')
+    .reduce((acc, cur) => acc + (parseFloat(cur.montoUber) || 0), 0);
 
   return (
     <div style={{ padding: '20px' }}>
