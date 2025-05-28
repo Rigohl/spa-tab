@@ -1,33 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { getContactsFromSheet } from '../utils/googleSheets';
+import { obtenerDatos } from '../utils/googleSheets';
 
 const Estadisticas = () => {
-  const [stats, setStats] = useState({});
-
-  const calcularEstadisticas = (data) => {
-    const total = data.length;
-    const respondido = data.filter(c => c.estado === 'Respondido').length;
-    const entrevistas = data.filter(c => c.estado === 'Citada a entrevista').length;
-    const asistieron = data.filter(c => c.estado === 'Acudió').length;
-    setStats({ total, respondido, entrevistas, asistieron });
-  };
+  const [datos, setDatos] = useState([]);
+  const [totales, setTotales] = useState({
+    total: 0,
+    respondidos: 0,
+    entrevistas: 0,
+    asistieron: 0,
+    gastosUber: 0,
+    abandonos: 0
+  });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      getContactsFromSheet().then(calcularEstadisticas);
-    }, 5000); // actualiza cada 5 segundos
+    const fetchData = async () => {
+      const datosRaw = await obtenerDatos();
+      setDatos(datosRaw);
+      const nuevosTotales = {
+        total: datosRaw.length,
+        respondidos: datosRaw.filter(d => d.estado !== 'Nuevo contacto').length,
+        entrevistas: datosRaw.filter(d => d.estado === 'Citada a entrevista').length,
+        asistieron: datosRaw.filter(d => d.estado === 'Acudió').length,
+        gastosUber: datosRaw
+          .filter(d => d.gastoUber === 'Sí')
+          .reduce((sum, d) => sum + (parseFloat(d.montoUber) || 0), 0),
+        abandonos: datosRaw.filter(d => d.estado === 'Dejó de contestar').length
+      };
+      setTotales(nuevosTotales);
+    };
 
-    return () => clearInterval(interval);
+    const intervalo = setInterval(fetchData, 5000); // Actualiza cada 5 segundos
+    fetchData();
+    return () => clearInterval(intervalo);
   }, []);
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h2>Estadísticas en tiempo real</h2>
       <ul>
-        <li>Total contactos: {stats.total}</li>
-        <li>Respondieron: {stats.respondido}</li>
-        <li>Citadas a entrevista: {stats.entrevistas}</li>
-        <li>Asistieron: {stats.asistieron}</li>
+        <li>Total de contactos: {totales.total}</li>
+        <li>Respondieron: {totales.respondidos}</li>
+        <li>Citadas a entrevista: {totales.entrevistas}</li>
+        <li>Acudieron: {totales.asistieron}</li>
+        <li>Gastos en Uber: ${totales.gastosUber.toFixed(2)}</li>
+        <li>Abandonos: {totales.abandonos}</li>
       </ul>
     </div>
   );
