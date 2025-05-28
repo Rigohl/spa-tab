@@ -1,17 +1,22 @@
 // src/utils/persistencia.js
-export const guardarCambios = async (campo, valor, telefono) => {
+
+export async function guardarCampo(id, campo, valor) {
   try {
-    await fetch('https://api.sheety.co/TU_API/hoja1', {
+    const response = await fetch('https://tu-api.com/guardar', {
       method: 'POST',
-      body: JSON.stringify({
-        [campo]: valor,
-        telefono
-      }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, campo, valor }),
     });
-  } catch (err) {
-    console.error('Error al guardar en Sheets:', err);
+
+    if (!response.ok) {
+      throw new Error('Error al guardar');
+    }
+
+    const result = await response.json();
+    console.log('Guardado:', result);
+  } catch (error) {
+    console.error('Error al guardar en Sheets:', error);
   }
-};
+}
