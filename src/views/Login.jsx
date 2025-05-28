@@ -2,22 +2,25 @@
 import React, { useState } from 'react';
 
 const Login = ({ onLogin }) => {
-  const [usuario, setUsuario] = useState('');
+  const [telefono, setTelefono] = useState('');
 
   const handleLogin = () => {
-    if (usuario) {
-      onLogin(usuario);
+    const telefonoLimpio = telefono.replace(/\D/g, ''); // limpia cualquier carácter que no sea número
+    if (telefonoLimpio.length >= 10) {
+      onLogin(telefonoLimpio);
+    } else {
+      alert('Ingresa un número de teléfono válido');
     }
   };
 
   return (
     <div style={{ padding: '20px', textAlign: 'center' }}>
-      <h2>Ingresa tu nombre de usuario</h2>
+      <h2>Ingresa tu número de teléfono</h2>
       <input
-        type="text"
-        value={usuario}
-        onChange={(e) => setUsuario(e.target.value)}
-        placeholder="Ej. admin"
+        type="tel"
+        value={telefono}
+        onChange={(e) => setTelefono(e.target.value)}
+        placeholder="Ej. 8123456789"
       />
       <br /><br />
       <button onClick={handleLogin}>Entrar</button>
