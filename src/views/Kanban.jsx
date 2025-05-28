@@ -1,6 +1,8 @@
 // src/views/Kanban.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Column from '../components/Column';
+import { obtenerDatos } from '../utils/googleSheets';
+import { guardarCampo } from '../utils/persistencia';
 
 const columnas = [
   'Nuevo contacto',
@@ -12,14 +14,35 @@ const columnas = [
   'Seguimiento'
 ];
 
-const Kanban = ({ datos }) => {
-  const datosPorColumna = (columna) =>
-    datos.filter((item) => item.estado === columna);
+const Kanban = () => {
+  const [datos, setDatos] = useState([]);
+
+  useEffect(() => {
+    const cargar = async () => {
+      const datosSheet = await obtenerDatos();
+      setDatos(datosSheet);
+    };
+    cargar();
+  }, []);
+
+  const actualizarDato = (id, campo, valor) => {
+    setDatos((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, [campo]: valor } : item))
+    );
+    guardarCampo(id, campo, valor);
+  };
+
+  const datosPorColumna = (col) => datos.filter((d) => d.estado === col);
 
   return (
     <div style={{ display: 'flex', overflowX: 'auto' }}>
       {columnas.map((col) => (
-        <Column key={col} title={col} cards={datosPorColumna(col)} />
+        <Column
+          key={col}
+          title={col}
+          cards={datosPorColumna(col)}
+          onUpdate={actualizarDato}
+        />
       ))}
     </div>
   );
