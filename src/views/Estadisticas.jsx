@@ -1,25 +1,34 @@
-// src/views/Estadisticas.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getContactsFromSheet } from '../utils/googleSheets';
 
-const Estadisticas = ({ datos }) => {
-  const contar = (campo, valor) => datos.filter((d) => d[campo] === valor).length;
+const Estadisticas = () => {
+  const [stats, setStats] = useState({});
 
-  const total = datos.length;
-  const respondido = contar('estado', 'Respondido');
-  const entrevistas = contar('estado', 'Citada a entrevista');
-  const acudieron = contar('estado', 'Acudió');
-  const gastosUber = datos
-    .filter((d) => d.gastoUber === 'Sí')
-    .reduce((acc, cur) => acc + (parseFloat(cur.montoUber) || 0), 0);
+  const calcularEstadisticas = (data) => {
+    const total = data.length;
+    const respondido = data.filter(c => c.estado === 'Respondido').length;
+    const entrevistas = data.filter(c => c.estado === 'Citada a entrevista').length;
+    const asistieron = data.filter(c => c.estado === 'Acudió').length;
+    setStats({ total, respondido, entrevistas, asistieron });
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getContactsFromSheet().then(calcularEstadisticas);
+    }, 5000); // actualiza cada 5 segundos
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Estadísticas</h2>
-      <p>Total de contactos: {total}</p>
-      <p>Respondieron: {respondido}</p>
-      <p>Citadas a entrevista: {entrevistas}</p>
-      <p>Acudieron: {acudieron}</p>
-      <p>Gasto total en Uber: ${gastosUber.toFixed(2)}</p>
+    <div>
+      <h2>Estadísticas en tiempo real</h2>
+      <ul>
+        <li>Total contactos: {stats.total}</li>
+        <li>Respondieron: {stats.respondido}</li>
+        <li>Citadas a entrevista: {stats.entrevistas}</li>
+        <li>Asistieron: {stats.asistieron}</li>
+      </ul>
     </div>
   );
 };
