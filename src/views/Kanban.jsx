@@ -1,6 +1,5 @@
+// src/views/Kanban.jsx
 import React from 'react';
-import { useEffect, useState } from 'react';
-import { obtenerDatos } from '../utils/googleSheets';
 import Column from '../components/Column';
 
 const columnas = [
@@ -13,16 +12,9 @@ const columnas = [
   'Seguimiento'
 ];
 
-const Kanban = () => {
-  const [datos, setDatos] = useState([]);
-
-  useEffect(() => {
-    obtenerDatos().then(setDatos);
-  }, []);
-
- const datosPorColumna = (columna) => {
-  return datos.filter((item) => item.estado && item.estado === columna);
-};
+const Kanban = ({ datos }) => {
+  const datosPorColumna = (columna) =>
+    datos.filter((item) => item.estado === columna);
 
   return (
     <div style={{ display: 'flex', overflowX: 'auto' }}>
