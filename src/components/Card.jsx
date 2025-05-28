@@ -1,3 +1,4 @@
+// src/components/Card.jsx
 import React, { useState } from 'react';
 
 const Card = ({ card, columnTitle }) => {
@@ -7,11 +8,11 @@ const Card = ({ card, columnTitle }) => {
   const [seguimiento, setSeguimiento] = useState(card.seguimiento || '');
   const [negocio, setNegocio] = useState(card.negocio || '');
   const [entrevista, setEntrevista] = useState(card.entrevista || '');
-  const [acudio, setAcudio] = useState(card.acudió || '');
+  const [acudio, setAcudio] = useState(card.acudio || '');
   const [gastoUber, setGastoUber] = useState(card.gastoUber || 'No');
-  const [montoUber, setMontoUber] = useState('');
-  const [motivoNoTrabajo, setMotivoNoTrabajo] = useState('');
-  const [subestado, setSubestado] = useState('');
+  const [montoUber, setMontoUber] = useState(card.montoUber || '');
+  const [motivoNoTrabajo, setMotivoNoTrabajo] = useState(card.motivoNoTrabajo || '');
+  const [subestado, setSubestado] = useState(card.subestado || '');
 
   const es = (col) => columnTitle === col;
 
@@ -19,7 +20,12 @@ const Card = ({ card, columnTitle }) => {
     <div className="card">
       <strong>
         Nombre:{' '}
-        <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+        <input
+          type="text"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          placeholder="Nombre"
+        />
       </strong>
       <br />
       Teléfono:{' '}
@@ -28,16 +34,31 @@ const Card = ({ card, columnTitle }) => {
       </a>
       <br />
       Ciudad:{' '}
-      <input type="text" value={ciudad} onChange={(e) => setCiudad(e.target.value)} />
+      <input
+        type="text"
+        value={ciudad}
+        onChange={(e) => setCiudad(e.target.value)}
+        placeholder="Ciudad"
+      />
       <br />
       Origen:{' '}
-      <input type="text" value={origen} onChange={(e) => setOrigen(e.target.value)} />
+      <input
+        type="text"
+        value={origen}
+        onChange={(e) => setOrigen(e.target.value)}
+        placeholder="Facebook, Insta, etc"
+      />
 
       {es('Citada a entrevista') && (
         <>
           <br />
           Fecha/hora entrevista:{' '}
-          <input type="text" value={entrevista} onChange={(e) => setEntrevista(e.target.value)} />
+          <input
+            type="text"
+            value={entrevista}
+            onChange={(e) => setEntrevista(e.target.value)}
+            placeholder="Ej. Martes 5pm"
+          />
         </>
       )}
 
@@ -53,7 +74,12 @@ const Card = ({ card, columnTitle }) => {
             <>
               <br />
               Monto Uber:{' '}
-              <input type="text" value={montoUber} onChange={(e) => setMontoUber(e.target.value)} />
+              <input
+                type="text"
+                value={montoUber}
+                onChange={(e) => setMontoUber(e.target.value)}
+                placeholder="Ej. 150"
+              />
             </>
           )}
         </>
@@ -111,6 +137,7 @@ const Card = ({ card, columnTitle }) => {
                 type="text"
                 value={motivoNoTrabajo}
                 onChange={(e) => setMotivoNoTrabajo(e.target.value)}
+                placeholder="Ej. ya no quiso"
               />
             </>
           )}
