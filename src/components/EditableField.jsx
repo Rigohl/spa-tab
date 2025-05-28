@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const EditableField = ({ value, onChange, placeholder = '', type = 'text' }) => {
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+
+  useEffect(() => {
+    setTempValue(value);
+  }, [value]);
 
   const handleBlur = () => {
     setEditing(false);
